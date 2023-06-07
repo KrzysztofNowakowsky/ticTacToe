@@ -45,6 +45,7 @@ public class ticTac {
     }
 
     public static void wyswietlTablice(char ticTacToe[][]) {
+
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 System.out.print(ticTacToe[i][j]);
@@ -69,24 +70,48 @@ public class ticTac {
                 counter = counter + 1;
             }
         }
-        ticTac.wyswietlTablice(ticTacToe);
-        for (int i = 0; i < 9; i++) {
-            int numer = input.nextInt() - 1;
+
+        do {
+            ticTac.wyswietlTablice(ticTacToe);
+            String wiersz = input.nextLine();
+            if (wiersz.length() > 1) {
+                System.out.println("PODAJ cyfre od 1-9");
+                continue;
+            }
+            int numer = 0;
+            try {
+                numer = Integer.parseInt(wiersz) - 1;
+            } catch (Exception e) {
+                System.out.println("Podaj cyfre!");
+                continue;
+            }
+            
             ticTacToe[numer / 3][numer % 3] = 'O';
+
             wyswietlTablice(ticTacToe);
             if (!czyWygral(ticTacToe, numer / 3, numer % 3, numer)) {
-                numer = input.nextInt() - 1;
-                ticTacToe[numer / 3][numer % 3] = 'X';
-                wyswietlTablice(ticTacToe);
-                if (czyWygral(ticTacToe, numer / 3, numer % 3, numer)) {
-                    System.out.println("Wygral X");
-                    break;
+                numer = 0;
+                while (numer == 0) {
+                    System.out.println("");
+                    wiersz = input.nextLine();
+                    try {
+                        numer = Integer.parseInt(wiersz) - 1;
+                    } catch (Exception e) {
+                        System.out.println("Podaj cyfre!");
+                        continue;
+                    }
+                    ticTacToe[numer / 3][numer % 3] = 'X';
+                    wyswietlTablice(ticTacToe);
+                    if (czyWygral(ticTacToe, numer / 3, numer % 3, numer)) {
+                        System.out.println("Wygral X");
+                        break;
+                    }
                 }
             } else {
                 System.out.println("Wygral O");
                 break;
             }
-        }
+        } while (true);
         input.close();
 
     }
